@@ -48,8 +48,7 @@ Une interface web est accessible pour interagir avec IBM MQ :
 - **Utilisateur** : `admin`
 - **Mot de passe** : `passw0rd`
 
-Vous pouvez utiliser ce tableau de bord pour envoyer un message à la file **DEV.QUEUE.1**, qui est celle écoutée par l’application dans le cas nominal.
-
+  Vous pouvez utiliser ce tableau de bord pour envoyer un message à la file **DEV.QUEUE.1** celle écoutée par l’application dans le cas nominal,qui appartient au **Queue Manager QM1** 
 ## Accès à PostgreSQL
 
 - **Port** : `5432`
