@@ -1,6 +1,16 @@
+
 # MQ Message Core - Backend
 
 Une application de gestion de messages techniques et de partenaires développée avec Spring Boot, PostgreSQL, et IBM MQ côté backend. Les messages reçus depuis une file MQ sont stockés en base de données, tandis que la gestion des partenaires s’effectue via une API REST.
+
+## Technologies utilisées
+
+- Java 21
+- Spring Boot 3
+- IBM MQ
+- PostgreSQL
+- Maven
+- Docker & Docker Compose
 
 ## Prérequis
 
@@ -38,7 +48,7 @@ Une interface web est accessible pour interagir avec IBM MQ :
 - **Utilisateur** : `admin`
 - **Mot de passe** : `passw0rd`
 
-Vous pouvez utiliser ce tableau de bord pour envoyer un message à la file **DEV.QUEUE.1**, qui est celle écoutée par l’application.
+Vous pouvez utiliser ce tableau de bord pour envoyer un message à la file **DEV.QUEUE.1**, qui est celle écoutée par l’application dans le cas nominal.
 
 ## Accès à PostgreSQL
 
@@ -63,22 +73,10 @@ Cette application devrait répondre à des contraintes de performance et de rés
 
 - **Pagination des messages** : Les messages sont consultés via une API paginée afin de limiter la charge sur la base de données et améliorer la rapidité de réponse.
 - **Listener IBM MQ robuste** : Implémentation d'un listener IBM MQ gérant la redélivrance des messages et la mise en backout des messages échoués, garantissant ainsi une résilience accrue dans le traitement.
-- **Tuning HikariCP** : Le pool de connexions à PostgreSQL est optimisé pour assurer une meilleure gestion de la charge concurrente.
-
-## Technologies utilisées
-
-- Java 21
-- Spring Boot 3
-- IBM MQ
-- PostgreSQL
-- Maven
-- Docker & Docker Compose
+- **Tuning HikariCP** : Le pool de connexions à PostgreSQL est optimisé pour garantir une performance continue sous charge élevée.
 
 ## Remarques
 
 - Toutes les configurations (ports, credentials, files MQ, etc.) sont centralisées dans `docker-compose.yml`.
 - Aucun besoin de packager manuellement l’application. Le `Dockerfile` s’en occupe.
-
-## Conclusion
-
-Une seule commande suffit pour tout lancer. Ce projet est conçu pour être simple à démarrer, tester et déployer grâce à Docker.
+- Une seule commande suffit pour tout lancer. Ce projet est conçu pour être simple à démarrer, tester et déployer grâce à Docker.
