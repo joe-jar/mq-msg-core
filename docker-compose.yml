@@ -1,5 +1,20 @@
-version: '3.8'
+version: '3.9'
+
 services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mq-network
+
   ibm-mq:
     image: icr.io/ibm-messaging/mq:9.3.5.0-r1
     container_name: ibm-mq
@@ -13,7 +28,42 @@ services:
       MQ_ADMIN_PASSWORD: passw0rd
     volumes:
       - mqdata:/mnt/mqm
+    networks:
+      - mq-network
 
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - ibm-mq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+
+      IBM_MQ_QUEUE_MANAGER: QM1
+      IBM_MQ_CHANNEL: DEV.APP.SVRCONN
+      IBM_MQ_CONN_NAME: ibm-mq(1414)
+      IBM_MQ_USER: app
+      IBM_MQ_PASSWORD: passw0rd
+      IBM_MQ_QUEUE: DEV.QUEUE.1
+      IBM_MQ_BACKOUT_QUEUE: DEV.QUEUE.2
+      IBM_MQ_BACKOUT_THRESHOLD: 3
+
+      SPRING_JMS_LISTENER_AUTO_STARTUP: true
+      FRONTEND_URL: http://localhost:4200
+
+    networks:
+      - mq-network
 
 volumes:
+  postgres_data:
   mqdata:
+
+networks:
+  mq-network:
